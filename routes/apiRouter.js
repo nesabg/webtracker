@@ -9,16 +9,17 @@ router.get('/all', (req, res) => {
 })
 
 router.post('/insertSession', async(req, res) => {
-    const data = new Webdata(req.body)
+    
+    const data = await new Webdata(req.body)
 
     try{
         const response = await data.save()  
+        console.log(response)
     }catch(e){
         console.error(e)
     }
+    res.status(201).json({"data": "created"})
 
-    res.json(JSON.stringify(response))
-    
 })
 
 module.exports = router
