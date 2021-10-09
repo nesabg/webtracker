@@ -12,6 +12,8 @@ router.post('/insertSession', async(req, res) => {
     
     const data = await new Webdata(req.body)
 
+    console.log(req.body)
+
     try{
         const response = await data.save()  
         console.log(response)
