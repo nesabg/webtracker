@@ -12,6 +12,9 @@ const WebdataSchema = new mongoose.Schema({
     },
     browser: {
         type: String
+    },
+    documentTitle: {
+        type: String
     }
 })
 
