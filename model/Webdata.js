@@ -7,8 +7,8 @@ const WebdataSchema = new mongoose.Schema({
     os: {
         type: String
     },
-    dateOffLanding: {
-        type: Number
+    date: {
+        type: String
     },
     browser: {
         type: String

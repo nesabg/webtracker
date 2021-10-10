@@ -9,14 +9,20 @@ router.get('/all', (req, res) => {
 })
 
 router.post('/insertSession', async(req, res) => {
-    
-    const data = await new Webdata(req.body)
 
-    console.log(req.body)
+    const { ip, os, browser } = req.body
+    
+    const data = await new Webdata({
+        ip,
+        os,
+        browser,
+        date: new Date()
+    })
+
+    console.log(data)
 
     try{
         const response = await data.save()  
-        console.log(response)
     }catch(e){
         console.error(e)
     }
