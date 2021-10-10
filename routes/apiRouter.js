@@ -2,10 +2,11 @@ const router = require('express').Router()
 
 const Webdata = require('../model/Webdata')
 
-router.get('/all', (req, res) => {
-    res.json({
-        "ok": "Super"
-    })
+router.get('/all', async (req, res) => {
+
+    const data = await Webdata.find()
+
+    res.json(JSON.stringify(data))
 })
 
 router.post('/insertSession', async(req, res) => {
