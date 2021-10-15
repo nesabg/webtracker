@@ -1,21 +1,22 @@
 const router = require('express').Router()
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const User = require('../model/User')
 
-const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g
-const passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/g
+const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/
+const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
 
 router.post('/user/register', async (req, res) => {
     const { email, password } = req.body
 
     //Todo validation fields
     if(!emailRegex.test(email)){
-        return res.json('not valid email adres')
+        return res.status(403).json('not valid email adres')
     }
 
     if(!passRegex.test(password)){
-        return res.json('password must have be 8 character and have at least 1 Uppercase letter, 1 Lowercase letter, 1 number, 1 special character')
+        return res.status(403).json('password must have be 8 character and have at least 1 Uppercase letter, 1 Lowercase letter, 1 number, 1 special character')
     }
 
     //Todo adding bcrypt hashing password
@@ -31,12 +32,37 @@ router.post('/user/register', async (req, res) => {
     try{
        const data = await currentUser.save()
 
-       return res.json(JSON.stringify(data))
+       return res.status(201).json(JSON.stringify(data))
 
     }catch(e){
-        return res.json(e)
+        return res.status(403).json('This user already exist')
     }
 
+})
+
+router.post('/user/login', async (req, res) => {
+    const { email, password } = req.body
+
+    const fetchedUser = await User.findOne({ email }).exec()
+
+    if(!fetchedUser) {
+        return res.json('Username or password are incorrect')
+    }
+
+    const status = await bcrypt.compare(password, fetchedUser.password)
+
+    if(!status){
+        return res.json('Username or password are incorrect')
+    }
+
+    const payload = {
+        id: fetchedUser._id.toString(),
+        email: fetchedUser.email
+    }
+
+    const token = await jwt.sign({payload}, process.env.JWT_SECRET, { expiresIn: '1h' }) 
+
+    return res.status(200).json(token)
 })
 
 module.exports = router
