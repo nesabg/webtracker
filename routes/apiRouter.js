@@ -2,7 +2,9 @@ const router = require('express').Router()
 
 const Webdata = require('../model/Webdata')
 
-router.get('/all', async (req, res) => {
+const { authorization } = require('../controllers/userController')
+
+router.get('/all', authorization, async (req, res) => {
 
     const data = await Webdata.find()
 

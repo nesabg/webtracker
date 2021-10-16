@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 
 const User = require('../model/User')
 
+const { authorization } = require('../controllers/userController')
+
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/
 const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
 
@@ -40,7 +42,8 @@ router.post('/user/register', async (req, res) => {
 
 })
 
-router.post('/user/login', async (req, res) => {
+router.post('/user/login', authorization, async (req, res) => {
+
     const { email, password } = req.body
 
     const fetchedUser = await User.findOne({ email }).exec()
