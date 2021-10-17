@@ -8,7 +8,7 @@ router.get('/all', authorization, async (req, res) => {
 
     const data = await Webdata.find()
 
-    res.json(JSON.stringify(data))
+    res.status(200),json(JSON.stringify(data))
 })
 
 router.post('/insertSession', async(req, res) => {
@@ -22,8 +22,6 @@ router.post('/insertSession', async(req, res) => {
         date: new Date(),
         documentTitle
     })
-
-    console.log(data)
 
     try{
         const response = await data.save()  
