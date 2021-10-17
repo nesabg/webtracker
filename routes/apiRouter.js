@@ -8,7 +8,7 @@ router.get('/all', authorization, async (req, res) => {
 
     const data = await Webdata.find()
 
-    res.status(200),json(JSON.stringify(data))
+    res.status(200).json(JSON.stringify(data))
 })
 
 router.post('/insertSession', async(req, res) => {
