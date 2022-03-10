@@ -10,7 +10,6 @@ const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,}
 router.post('/user/register', async (req, res) => {
     const { email, password } = req.body
 
-    //Todo validation fields
     if(!emailRegex.test(email)){
         return res.status(403).json('not valid email adres')
     }
@@ -18,8 +17,6 @@ router.post('/user/register', async (req, res) => {
     if(!passRegex.test(password)){
         return res.status(403).json('password must have be 8 character and have at least 1 Uppercase letter, 1 Lowercase letter, 1 number, 1 special character')
     }
-
-    //Todo adding bcrypt hashing password
 
     const salt = await bcrypt.genSalt(+process.env.SALT)
     const hashedPass = await bcrypt.hash(password, salt)
@@ -47,13 +44,13 @@ router.post('/user/login', async (req, res) => {
     const fetchedUser = await User.findOne({ email }).exec()
 
     if(!fetchedUser) {
-        return res.json('Username or password are incorrect')
+        return res.status(403).json('Username or password are incorrect')
     }
 
     const status = await bcrypt.compare(password, fetchedUser.password)
 
     if(!status){
-        return res.json('Username or password are incorrect')
+        return res.status(403).json('Username or password are incorrect')
     }
 
     const payload = {

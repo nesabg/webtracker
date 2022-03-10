@@ -10,12 +10,12 @@ const authorization = async (req, res, next) => {
     try{
 
         const status = await jwt.verify(token, process.env.JWT_SECRET)
-    
-    }catch(e){
+        
+      }catch(e){
         return res.status(403).json("You are not authorized to see this page")
-    }
-
-  next()
+      }
+      
+      next()
 }
 
 
