@@ -32,6 +32,18 @@ router.post('/insertSession', async(req, res) => {
 
 })
 
+router.delete('/delete/:id', authorization, async(req, res) => {
+
+    try{
+        const response = await Webdata.findByIdAndDelete(req.params.id)
+    } catch(err) {
+        err.kind === 'ObjectId' ? res.status(400).json('Not valid record id') : res.status(500).json(err.kind)
+        return
+    }
+  
+    res.status(202).json('Successfully delete the record')
+})
+
 
 
 module.exports = router
