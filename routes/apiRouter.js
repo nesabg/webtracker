@@ -13,12 +13,13 @@ router.get('/all', authorization, async (req, res) => {
 
 router.post('/insertSession', async(req, res) => {
 
-    const { ip, os, browser, documentTitle } = req.body
+    const { ip, os, browser, documentTitle, crds } = req.body
     
     const data = await new Webdata({
         ip,
         os,
         browser,
+        crds,
         date: new Date(),
         documentTitle
     })

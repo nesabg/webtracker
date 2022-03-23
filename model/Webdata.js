@@ -13,6 +13,9 @@ const WebdataSchema = new mongoose.Schema({
     browser: {
         type: String
     },
+    crds: {
+        type: String
+    },
     documentTitle: {
         type: String
     }
