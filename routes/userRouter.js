@@ -8,7 +8,7 @@ const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/
 const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
 
 router.post('/user/register', async (req, res) => {
-    const { email, password } = req.body
+    const { email, password, avatarUrl } = req.body
 
     if(!emailRegex.test(email)){
         return res.status(403).json('not valid email adres')
@@ -23,7 +23,8 @@ router.post('/user/register', async (req, res) => {
 
     const currentUser = new User({
         email,
-        password: hashedPass
+        password: hashedPass,
+        avatarUrl
     })
 
     try{
@@ -58,7 +59,7 @@ router.post('/user/login', async (req, res) => {
         email: fetchedUser.email
     }
 
-    const token = await jwt.sign({payload}, process.env.JWT_SECRET, { expiresIn: '1h' }) 
+    const token = await jwt.sign({payload}, process.env.JWT_SECRET) 
 
     return res.status(200).json(token)
 })
